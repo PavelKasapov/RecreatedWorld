@@ -8,6 +8,10 @@ public class TestExecutor : MonoBehaviour
     void Start()
     {
         Debug.Log("Testing");
+
+        //Debug.Log("Test Map Generate Start");
+        //WorldMapMaganer.Instance.GenerateMap(5, 20);
+        //Debug.Log("Test Map Generate Complete");
     }
 
     // Update is called once per frame
