@@ -6,7 +6,19 @@ using UnityEngine.Tilemaps;
 public class WorldMapMaganer : MonoBehaviour
 {
     private static WorldMapMaganer _instance;
-    private List<WorldTile> worldMap = new List<WorldTile>();
+    private List<WorldTile> _worldMap = new List<WorldTile>();
+
+    public List<WorldTile> WorldMap
+    {
+        get 
+        {
+            return _worldMap;
+        } 
+        private set
+        {
+            _worldMap = value;
+        }
+    }
 
     public Tilemap groundLayout;
     public Tilemap locationsLayout;
@@ -55,7 +67,7 @@ public class WorldMapMaganer : MonoBehaviour
                     TerrainType = (TerrainType)Random.Range(0, 3),
                     Coords = new Vector3Int(i, j, 0)
                 };
-                worldMap.Add(tile);
+                WorldMap.Add(tile);
             }
         }
         RenderMap();
@@ -63,7 +75,7 @@ public class WorldMapMaganer : MonoBehaviour
 
     public void RenderMap()
     {
-        foreach (var tile in worldMap)
+        foreach (var tile in WorldMap)
         {
             groundLayout.SetTile(tile.Coords, TerrainTileBase[tile.TerrainType]);
         }
