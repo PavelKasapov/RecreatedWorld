@@ -19,6 +19,7 @@ public class TestExecutor : MonoBehaviour
         TileSelector tileSelector = selector.GetComponent<TileSelector>();
         tileSelector.SelectTile(testClick);
         Debug.Log("Success click");
+        // player.ConfirmMovement();
     }
 
     // Update is called once per frame

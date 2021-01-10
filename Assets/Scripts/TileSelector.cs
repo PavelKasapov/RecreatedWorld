@@ -6,7 +6,7 @@ public class TileSelector : MonoBehaviour
 {
     public WorldTile SelectedTile { get; private set; }
     private Grid _grid;
-    void Start()
+    void Awake()
     {
         _grid = WorldMapMaganer.Instance.GetComponent<Grid>();
     }
@@ -24,4 +24,6 @@ public class TileSelector : MonoBehaviour
         Vector3 centerOfSelectedTile = _grid.GetCellCenterWorld(selectedTileCoords);
         gameObject.transform.position = centerOfSelectedTile;
     }
+
+
 }
