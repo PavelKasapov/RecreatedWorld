@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TestExecutor : MonoBehaviour
 {
-    public GameObject selector;
+    public TileSelector tileSelector;
+    public Player player;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,10 +17,10 @@ public class TestExecutor : MonoBehaviour
 
         Vector3 testClick = new Vector2(150, 300);
         Debug.Log("Test trying to click on (" + testClick.x + ", " + testClick.y + ") mouse coords");
-        TileSelector tileSelector = selector.GetComponent<TileSelector>();
         tileSelector.SelectTile(testClick);
         Debug.Log("Success click");
-        // player.ConfirmMovement();
+
+        player.Move();
     }
 
     // Update is called once per frame

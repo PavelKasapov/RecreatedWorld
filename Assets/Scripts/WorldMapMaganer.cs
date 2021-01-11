@@ -58,6 +58,7 @@ public class WorldMapMaganer : MonoBehaviour
 
     public void GenerateMap(int mapHeight, int mapWidth)
     {
+        WorldMap.Clear();
         for (int i = (- mapHeight / 2); i < (mapHeight / 2 + mapHeight % 2); i++)
         {
             for (int j = ( - mapWidth / 2); j < (mapWidth / 2 + mapWidth % 2); j++)
