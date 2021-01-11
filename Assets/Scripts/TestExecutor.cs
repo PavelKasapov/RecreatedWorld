@@ -20,7 +20,8 @@ public class TestExecutor : MonoBehaviour
         tileSelector.SelectTile(testClick);
         Debug.Log("Success click");
 
-        player.Move();
+        CharacterManager.Instance.CreatePlayer("Gector");
+        CharacterManager.Instance.PlayerList.Find(x => x.Name == "Gector").Move();
     }
 
     // Update is called once per frame

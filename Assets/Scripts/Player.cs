@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public SpriteRenderer portrait;
     //public Vector3Int Coords { get; private set; }
+    public string Name { get;  set; }
     private Vector3 _targetWorldCoords;
     private float _speed = 1f;
     private Coroutine _moveCoroutine;
     private Grid _grid;
     private TileSelector _selector;
+
     
     // Start is called before the first frame update
     void Awake()
