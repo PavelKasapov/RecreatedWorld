@@ -17,6 +17,7 @@ public class TileSelector : MonoBehaviour
         Vector3Int gridCoord = _grid.WorldToCell(worldCoord);
         SelectedTile = WorldMapMaganer.Instance.WorldMap.Find(tile => tile.Coords == gridCoord);
         MoveSelector(SelectedTile.Coords);
+        GlobalStateManager.Instance.ControlledPlayer?.SetMovePoint(SelectedTile.Coords);
     }
 
     private void MoveSelector(Vector3Int selectedTileCoords)

@@ -1,32 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class TestExecutor : MonoBehaviour
 {
     public TileSelector tileSelector;
-    public Player player;
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Testing");
 
-        Debug.Log("Test Map Generate Start");
         WorldMapMaganer.Instance.GenerateMap(40, 40);
-        Debug.Log("Test Map Generate Complete");
+        CharacterManager.Instance.SpawnPlayer("Gector", true, "Sprites/PortraitSample", new Vector3Int(0, 0, 0), new Vector3(0, 0, 0));
+        tileSelector.SelectTile(new Vector2(50, 100));
+        GlobalStateManager.Instance.UnpauseGlobalMap();
+        StartCoroutine(SaveAndLoadRoutine());
 
-        Vector3 testClick = new Vector2(150, 300);
-        Debug.Log("Test trying to click on (" + testClick.x + ", " + testClick.y + ") mouse coords");
-        tileSelector.SelectTile(testClick);
-        Debug.Log("Success click");
-
-        CharacterManager.Instance.CreatePlayer("Gector");
-        CharacterManager.Instance.PlayerList.Find(x => x.Name == "Gector").Move();
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator SaveAndLoadRoutine()
     {
-        
+        yield return new WaitForSeconds(1);
+        GlobalStateManager.Instance.SaveGame();
+        Debug.Log("Save");
+        yield return new WaitForSeconds(1);
+        GlobalStateManager.Instance.LoadGame();
+        Debug.Log("Load");
+        GlobalStateManager.Instance.UnpauseGlobalMap();
+        yield return new WaitForSeconds(2.5f);
+        GlobalStateManager.Instance.LoadGame();
+        Debug.Log("Load");
     }
 }

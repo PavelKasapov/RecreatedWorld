@@ -121,6 +121,49 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &56922047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 56922049}
+  - component: {fileID: 56922048}
+  m_Layer: 0
+  m_Name: GlobalStateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &56922048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56922047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d040c8bd82cadbe4389c8339cf093926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &56922049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56922047}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.10656167, y: 0.089927696, z: -0.021743817}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &83016280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,8 +243,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 5024229582383158328, guid: 1a93ed14250eec849b18aea4f221054c,
     type: 3}
-  player: {fileID: 11400000, guid: 4569dbb974f67f64a9bf449051e2da0c, type: 2}
-  PlayerList: []
+  scriptablePlayerCharacter: {fileID: 11400000, guid: 4569dbb974f67f64a9bf449051e2da0c,
+    type: 2}
 --- !u!213 &151881678
 Sprite:
   m_ObjectHideFlags: 0
@@ -576,7 +619,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 604479174}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &604479174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2468,7 +2522,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSelector: {fileID: 2066001977}
-  player: {fileID: 0}
 --- !u!4 &1773619350
 Transform:
   m_ObjectHideFlags: 0
