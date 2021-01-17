@@ -2522,6 +2522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSelector: {fileID: 2066001977}
+  grid: {fileID: 0}
 --- !u!4 &1773619350
 Transform:
   m_ObjectHideFlags: 0

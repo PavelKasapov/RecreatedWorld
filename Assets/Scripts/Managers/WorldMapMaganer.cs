@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class WorldMapMaganer : MonoBehaviour
 {
     private static WorldMapMaganer _instance;
-    
+
     public Tilemap groundLayout;
     public Tilemap locationsLayout;
     #region TileBases
@@ -15,8 +15,10 @@ public class WorldMapMaganer : MonoBehaviour
     public TileBase forest;
     #endregion
 
-    Dictionary<TerrainType, TileBase> TerrainTileBase;
+    private Dictionary<TerrainType, TileBase> TerrainTileBase;
+    
 
+    public Grid Grid { get; set; }
     public List<WorldTile> WorldMap { get; set; }
     public static WorldMapMaganer Instance
     {
@@ -41,6 +43,7 @@ public class WorldMapMaganer : MonoBehaviour
             #endregion
         };
         WorldMap = new List<WorldTile>();
+        Grid = gameObject.GetComponent<Grid>();
     }
 
     public void GenerateMap(int mapHeight, int mapWidth)

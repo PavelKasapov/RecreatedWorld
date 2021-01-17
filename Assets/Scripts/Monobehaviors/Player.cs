@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -10,6 +11,7 @@ public class Player : MonoBehaviour
     private Coroutine _moveCoroutine;
     private Grid _grid;
     private Vector3 _targetWorldCoords;
+    private List<PathNode> _path;
     public Vector3Int TargetGridCoords { get; private set; }
     public string Name { get; set; }
     public bool DirectControl { get; set; }
@@ -24,20 +26,37 @@ public class Player : MonoBehaviour
     public void SetMovePoint(Vector3Int targetGridCoords)
     {
         TargetGridCoords = targetGridCoords;
-        _targetWorldCoords = _grid.GetCellCenterWorld(targetGridCoords);
-
-        if (_moveCoroutine == null)
-            _moveCoroutine = StartCoroutine(MoveRoutine());
+        Vector3Int gridCoords = WorldMapMaganer.Instance.Grid.WorldToCell(gameObject.transform.position);
+        if (gridCoords != targetGridCoords)
+        {
+            _path = Pathfinder.FindPath(gridCoords, targetGridCoords);
+            if (_moveCoroutine == null)
+                _moveCoroutine = StartCoroutine(MoveRoutine());
+            foreach (PathNode node in _path)
+            {
+                if (node.prevNode != null)
+                {
+                    Debug.DrawLine(WorldMapMaganer.Instance.Grid.GetCellCenterWorld(node.prevNode.Coords), WorldMapMaganer.Instance.Grid.GetCellCenterWorld(node.Coords), Color.red, 300f);
+                }
+            }
+        }
     }
 
 
     private IEnumerator MoveRoutine()
     {
-        while (transform.position != _targetWorldCoords)
+        while (_path.Count > 0)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _targetWorldCoords,
-                _speed * Time.deltaTime * GlobalStateManager.Instance.GlobalMapTimeScale);
+            PathNode nextNode = _path.FirstOrDefault();
+            _targetWorldCoords = _grid.GetCellCenterWorld(nextNode.Coords);
+            while (transform.position != _targetWorldCoords)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, _targetWorldCoords,
+                    _speed * Time.deltaTime * GlobalStateManager.Instance.GlobalMapTimeScale / nextNode.SelfCost);
 
+                yield return null;
+            }
+            _path.Remove(nextNode);
             yield return null;
         }
 
