@@ -54,31 +54,32 @@ public static class Pathfinder
         _closedList.Clear();
         _endPathNode = null;
         path.Reverse();
+        path.Remove(path[0]);
         return path;
     }
 
     private static void CheckNeibhourTiles(PathNode tile)
     {
-        List<Vector3Int> neibhourCoords = new List<Vector3Int>();
+        List<Vector3Int> neighbourCoords = new List<Vector3Int>();
         if (!_closedList.Exists(closedTile => closedTile.Coords == tile.Coords))
         {
-            neibhourCoords.Add(new Vector3Int(tile.Coords.x + 1, tile.Coords.y, 0));
-            neibhourCoords.Add(new Vector3Int(tile.Coords.x - 1, tile.Coords.y, 0));
-            neibhourCoords.Add(new Vector3Int(tile.Coords.x, tile.Coords.y + 1, 0));
-            neibhourCoords.Add(new Vector3Int(tile.Coords.x, tile.Coords.y - 1, 0));
+            neighbourCoords.Add(new Vector3Int(tile.Coords.x + 1, tile.Coords.y, 0));
+            neighbourCoords.Add(new Vector3Int(tile.Coords.x - 1, tile.Coords.y, 0));
+            neighbourCoords.Add(new Vector3Int(tile.Coords.x, tile.Coords.y + 1, 0));
+            neighbourCoords.Add(new Vector3Int(tile.Coords.x, tile.Coords.y - 1, 0));
 
             if (tile.Coords.y % 2 == 0)
             {
-                neibhourCoords.Add(new Vector3Int(tile.Coords.x - 1, tile.Coords.y + 1, 0));
-                neibhourCoords.Add(new Vector3Int(tile.Coords.x - 1, tile.Coords.y - 1, 0));
+                neighbourCoords.Add(new Vector3Int(tile.Coords.x - 1, tile.Coords.y + 1, 0));
+                neighbourCoords.Add(new Vector3Int(tile.Coords.x - 1, tile.Coords.y - 1, 0));
             }
             else
             {
-                neibhourCoords.Add(new Vector3Int(tile.Coords.x + 1, tile.Coords.y + 1, 0));
-                neibhourCoords.Add(new Vector3Int(tile.Coords.x + 1, tile.Coords.y - 1, 0));
+                neighbourCoords.Add(new Vector3Int(tile.Coords.x + 1, tile.Coords.y + 1, 0));
+                neighbourCoords.Add(new Vector3Int(tile.Coords.x + 1, tile.Coords.y - 1, 0));
             }
         }
-        foreach (Vector3Int coords in neibhourCoords)
+        foreach (Vector3Int coords in neighbourCoords)
         {
             if (!_closedList.Exists(closedTile => closedTile.Coords == coords))
             {
@@ -117,8 +118,8 @@ public static class Pathfinder
         int distance = GetTileDistance(fromCoord, toCoord);
         for (int i = 1; i <= distance; i++)
         {
-            Vector3 newWorldCoord = Vector3.Lerp(WorldMapMaganer.Instance.Grid.GetCellCenterWorld(fromCoord), WorldMapMaganer.Instance.Grid.GetCellCenterWorld(toCoord), 1.0f * i / distance);
-            Vector3Int newCellCoord = WorldMapMaganer.Instance.Grid.WorldToCell(newWorldCoord);
+            Vector3 newWorldCoord = Vector3.Lerp(WorldMapMaganer.Instance.grid.GetCellCenterWorld(fromCoord), WorldMapMaganer.Instance.grid.GetCellCenterWorld(toCoord), 1.0f * i / distance);
+            Vector3Int newCellCoord = WorldMapMaganer.Instance.grid.WorldToCell(newWorldCoord);
             HCost += TerrainMoveCost[WorldMapMaganer.Instance.WorldMap.Find(tile => tile.Coords == newCellCoord).TerrainType];
         }
         return HCost;

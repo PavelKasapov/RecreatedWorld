@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
-public class WorldMapMaganer : MonoBehaviour
+public class WorldMapMaganer : MonoBehaviour, IPointerClickHandler
 {
     private static WorldMapMaganer _instance;
 
-    public Tilemap groundLayout;
-    public Tilemap locationsLayout;
+    public Tilemap groundTilemap;
+    public Grid grid;
+    public TileSelector selector;
     #region TileBases
     public TileBase water;
     public TileBase grassland;
@@ -18,8 +20,8 @@ public class WorldMapMaganer : MonoBehaviour
     private Dictionary<TerrainType, TileBase> TerrainTileBase;
     
 
-    public Grid Grid { get; set; }
-    public List<WorldTile> WorldMap { get; set; }
+    
+    public List<WorldTile> WorldMap { get; set; } = new List<WorldTile>();
     public static WorldMapMaganer Instance
     {
         get
@@ -42,8 +44,6 @@ public class WorldMapMaganer : MonoBehaviour
             [TerrainType.Forest] = forest,
             #endregion
         };
-        WorldMap = new List<WorldTile>();
-        Grid = gameObject.GetComponent<Grid>();
     }
 
     public void GenerateMap(int mapHeight, int mapWidth)
@@ -66,11 +66,18 @@ public class WorldMapMaganer : MonoBehaviour
 
     public void RenderMap()
     {
-        groundLayout.ClearAllTiles();
+        groundTilemap.ClearAllTiles();
         foreach (var tile in WorldMap)
         {
-            groundLayout.SetTile(tile.Coords, TerrainTileBase[tile.TerrainType]);
+            groundTilemap.SetTile(tile.Coords, TerrainTileBase[tile.TerrainType]);
         }
 
+    }
+
+
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //Debug.Log("click");
     }
 }

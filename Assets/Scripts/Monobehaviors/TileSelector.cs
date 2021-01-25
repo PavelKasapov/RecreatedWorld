@@ -4,25 +4,20 @@ using UnityEngine;
 
 public class TileSelector : MonoBehaviour
 {
+    public SpriteRenderer spriteRenderer;
+    public Sprite tileSelectorSprite;
+    public Sprite characterSelectorSprite;
     public WorldTile SelectedTile { get; private set; }
-    private Grid _grid;
-    void Awake()
-    {
-        _grid = WorldMapMaganer.Instance.GetComponent<Grid>();
-    }
 
-    public void SelectTile(Vector2 mousePos)
+    public void SelectTile(Vector3Int gridCoords)
     {
-        Vector3 worldCoord = Camera.main.ScreenToWorldPoint(mousePos);
-        Vector3Int gridCoord = _grid.WorldToCell(worldCoord);
-        SelectedTile = WorldMapMaganer.Instance.WorldMap.Find(tile => tile.Coords == gridCoord);
+        SelectedTile = WorldMapMaganer.Instance.WorldMap.Find(tile => tile.Coords == gridCoords);
         MoveSelector(SelectedTile.Coords);
-        GlobalStateManager.Instance.ControlledPlayer?.SetMovePoint(SelectedTile.Coords);
     }
 
     private void MoveSelector(Vector3Int selectedTileCoords)
     {
-        Vector3 centerOfSelectedTile = _grid.GetCellCenterWorld(selectedTileCoords);
+        Vector3 centerOfSelectedTile = WorldMapMaganer.Instance.grid.GetCellCenterWorld(selectedTileCoords);
         gameObject.transform.position = centerOfSelectedTile;
     }
 
