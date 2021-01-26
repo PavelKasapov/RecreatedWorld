@@ -6,16 +6,33 @@ using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
-    public void TestClick(InputAction.CallbackContext context)
+    public CameraController cameraController;
+    private bool _isEdgeScrollEnable = true;
+    
+    public void OnCameraMovementInput(InputAction.CallbackContext context)
     {
-        
-        if(context.performed)
+        Vector2 moveCamDirection = context.ReadValue<Vector2>();
+        if (moveCamDirection != Vector2.zero)
         {
-            //PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-            //Debug.Log(pointerEventData);
+            _isEdgeScrollEnable = false;
         }
-        
+        else
+        {
+            _isEdgeScrollEnable = true;
+        }
+        cameraController.MoveCam(moveCamDirection);
     }
+
+    public void OnPointerMovement(InputAction.CallbackContext context)
+    {
+        if (_isEdgeScrollEnable)
+        {
+            Vector2 pointerPos = context.ReadValue<Vector2>();
+            Vector2 moveCamDirection = ScreenPosToEdgeDirection(pointerPos);
+            cameraController.MoveCam(moveCamDirection);
+        }
+    }
+
     public void OnGlobalMapMouseClick(BaseEventData baseEventData)
     {
         PointerEventData pointerEventData = (PointerEventData)baseEventData;
@@ -30,29 +47,56 @@ public class InputController : MonoBehaviour
                 GlobalStateManager.Instance.ControlledPlayer = null;
                 break;
             case PointerEventData.InputButton.Right:
-                GlobalStateManager.Instance.ControlledPlayer?.SetMovePoint(gridCoord);
+                if (WorldMapMaganer.Instance.WorldMap.Find(tile => tile.Coords == gridCoord).TerrainType != TerrainType.Water)
+                {
+                    GlobalStateManager.Instance.ControlledPlayer?.SetMovePoint(gridCoord);
+                }
                 break;
         }
     }
-    public void OnCharacterMouseClick(BaseEventData baseEventData)
+
+
+    private Vector2 ScreenPosToEdgeDirection(Vector2 screenPos)
     {
-        PointerEventData pointerEventData = (PointerEventData)baseEventData;
-        Vector3 worldCoord = Camera.main.ScreenToWorldPoint(pointerEventData.position);
-        Vector3Int gridCoord = WorldMapMaganer.Instance.grid.WorldToCell(worldCoord);
-        GameObject hitPlayer = pointerEventData.pointerPressRaycast.gameObject;
-        switch (pointerEventData.button)
+        Vector2 edgeDirection = new Vector2();
+        switch (screenPos.x)
         {
-            case PointerEventData.InputButton.Left:
-                WorldMapMaganer.Instance.selector.transform.parent = hitPlayer.transform;
-                WorldMapMaganer.Instance.selector.transform.position = Vector3.zero;
-                break;
-            case PointerEventData.InputButton.Right:
-                //TODO remove this test line
-                GlobalStateManager.Instance.ControlledPlayer = hitPlayer.GetComponent<Player>();
-                break;
+            case float n when (n > 0 && n < Screen.width):
+                {
+                    edgeDirection.x = 0;
+                    break;
+                }
+            case float n when (n <= 0):
+                {
+                    edgeDirection.x = -1;
+                    break;
+                }
+            
+            case float n when (n >= Screen.width):
+                {
+                    edgeDirection.x = 1;
+                    break;
+                }
         }
+        switch (screenPos.y)
+        {
+            case float n when (n > 0 && n < Screen.height):
+                {
+                    edgeDirection.y = 0;
+                    break;
+                }
+            case float n when (n <= 0):
+                {
+                    edgeDirection.y = -1;
+                    break;
+                }
+
+            case float n when (n >= Screen.height):
+                {
+                    edgeDirection.y = 1;
+                    break;
+                }
+        }
+        return edgeDirection.normalized;
     }
-
-
-
 }

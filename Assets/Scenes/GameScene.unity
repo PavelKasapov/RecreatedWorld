@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -311,6 +312,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b5dded2a9302a841a79e73750bef730, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &604479171
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,6 +868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b28435b49d05f4bb5e88b90b217c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraController: {fileID: 519420033}
 --- !u!4 &938466518
 Transform:
   m_ObjectHideFlags: 0
@@ -896,17 +910,9 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 76eac56e-f938-4a81-af01-941c74b8e1f3
-    m_ActionName: Player/MoveCam[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 77a92328-0c00-4de6-9cfe-466aa6fa18e4
-    m_ActionName: Player/Look[/Mouse/delta]
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 938466517}
-        m_MethodName: TestClick
+        m_MethodName: OnCameraMovementInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -916,8 +922,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: a54ee6a6-22aa-4f27-a912-9ddb8f162ffe
-    m_ActionName: Player/Click[/Mouse/leftButton]
+    m_ActionId: 76eac56e-f938-4a81-af01-941c74b8e1f3
+    m_ActionName: Player/MoveCam[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 0e6d7fec-e26f-45e4-bb03-1ed2b941e3ef
@@ -958,6 +964,21 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 7a299b5b-a13a-44ae-8179-d48994f654f6
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 938466517}
+        m_MethodName: OnPointerMovement
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6665f5a0-dd21-4673-be6a-ae36fa19b120
+    m_ActionName: Player/New action[/Mouse/position]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

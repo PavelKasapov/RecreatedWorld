@@ -45,7 +45,7 @@ public class TestExecutor : MonoBehaviour
         yield return new WaitForSeconds(2);
         GlobalStateManager.Instance.ControlledPlayer.SetMovePoint(new Vector3Int(2, 2, 0));
         yield return new WaitForSeconds(2);
-        GlobalStateManager.Instance.ControlledPlayer.SetMovePoint(new Vector3Int(-2, -3, 0));
+        //GlobalStateManager.Instance.ControlledPlayer.SetMovePoint(new Vector3Int(-2, -3, 0));
     }
 
     public void onClickAction(InputAction.CallbackContext context)
