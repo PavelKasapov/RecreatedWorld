@@ -56,4 +56,9 @@ public class GlobalStateManager : MonoBehaviour
     {
         GlobalMapTimeScale = 1f;
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }
