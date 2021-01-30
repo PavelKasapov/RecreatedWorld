@@ -23,7 +23,7 @@ public class CameraController : MonoBehaviour
     }
     private IEnumerator MoveRoutine()
     {
-        while (_moveDirection != Vector2.zero)
+        while (_moveDirection != Vector2.zero && Application.isFocused && !GlobalStateManager.Instance.IsMenuOpened)
         {
 
             transform.position += (Vector3)_moveDirection * _speed * Time.deltaTime;

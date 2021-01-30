@@ -5,9 +5,10 @@ using UnityEngine;
 public class GlobalStateManager : MonoBehaviour
 {
     private static GlobalStateManager _instance;
-    public float GlobalMapTimeScale { get; set; }
     public Player ControlledPlayer { get; set; }
-    
+    public bool IsMenuOpened { get; set; } = true;
+    public bool IsGlobalMapPaused { get; set; } = true;
+
     public static GlobalStateManager Instance
     {
         get
@@ -32,7 +33,7 @@ public class GlobalStateManager : MonoBehaviour
 
     public void LoadGame()
     {
-        this.PauseGlobalMap();
+        IsGlobalMapPaused = true;
         SaveData data = SaveSystem.LoadGame();
         WorldMapMaganer.Instance.WorldMap = data.WorldMapData;
         foreach (Player player in CharacterManager.Instance.PlayerList)
@@ -42,19 +43,9 @@ public class GlobalStateManager : MonoBehaviour
         CharacterManager.Instance.PlayerList.Clear();
         foreach (PlayerSaveData player in data.PlayerListData) 
         {
-            CharacterManager.Instance.SpawnPlayer(player.Name, player.DirectControl, player.SpritePath, player.TargetGridCoord, player.WorldCoord);
+            CharacterManager.Instance.SpawnPlayer(player.Name, player.DirectControl, player.SpritePath, player.WorldCoord, player.TargetGridCoord);
         }
         WorldMapMaganer.Instance.RenderMap();
-    }
-
-    public void PauseGlobalMap()
-    {
-        GlobalMapTimeScale = 0f;
-    }
-
-    public void UnpauseGlobalMap()
-    {
-        GlobalMapTimeScale = 1f;
     }
 
     public void ExitGame()

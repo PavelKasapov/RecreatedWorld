@@ -25,7 +25,7 @@ public class CharacterManager : MonoBehaviour
     {
         PlayerList = new List<Player>();
     }
-    public void SpawnPlayer(string name, bool directControl, string spritePath, Vector3Int targetGridCoord, Vector3 worldCoord) 
+    public void SpawnPlayer(string name, bool directControl, string spritePath, Vector3 worldCoord, Vector3Int targetGridCoord) 
     {
         Player newPlayer = Instantiate(characterPrefab, worldCoord, Quaternion.identity).GetComponent<Player>();
         newPlayer.Name = name;
@@ -39,11 +39,11 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    private void SpawnCharacter(Player characterToSpawn)
-    {
-        Player newPlayer = Instantiate(characterPrefab, new Vector3(0, 0), Quaternion.identity).GetComponent<Player>();
-        newPlayer.Name = name;
-        newPlayer.portrait.sprite = scriptablePlayerCharacter.portraitSprite;
-    }
+    //private void SpawnCharacter(Player characterToSpawn)
+    //{
+    //    Player newPlayer = Instantiate(characterPrefab, new Vector3(0, 0), Quaternion.identity).GetComponent<Player>();
+    //    newPlayer.Name = name;
+    //    newPlayer.portrait.sprite = scriptablePlayerCharacter.portraitSprite;
+    //}
 
 }

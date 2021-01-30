@@ -54,7 +54,7 @@ public class Player : MonoBehaviour, IPointerClickHandler
             while (transform.position != _targetWorldCoords)
             {
                 transform.position = Vector3.MoveTowards(transform.position, _targetWorldCoords,
-                    _speed * Time.deltaTime * GlobalStateManager.Instance.GlobalMapTimeScale / nextNode.SelfCost);
+                    _speed * Time.deltaTime * (GlobalStateManager.Instance.IsGlobalMapPaused? 0 : 1) / nextNode.SelfCost);
 
                 yield return null;
             }

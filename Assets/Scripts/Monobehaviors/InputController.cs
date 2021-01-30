@@ -7,25 +7,25 @@ using UnityEngine.InputSystem;
 public class InputController : MonoBehaviour
 {
     public CameraController cameraController;
-    private bool _isEdgeScrollEnable = true;
+    public bool isEdgeScrollEnable = true;
     
     public void OnCameraMovementInput(InputAction.CallbackContext context)
     {
         Vector2 moveCamDirection = context.ReadValue<Vector2>();
         if (moveCamDirection != Vector2.zero)
         {
-            _isEdgeScrollEnable = false;
+            isEdgeScrollEnable = false;
         }
         else
         {
-            _isEdgeScrollEnable = true;
+            isEdgeScrollEnable = true;
         }
         cameraController.MoveCam(moveCamDirection);
     }
 
     public void OnPointerMovement(InputAction.CallbackContext context)
     {
-        if (_isEdgeScrollEnable)
+        if (isEdgeScrollEnable)
         {
             Vector2 pointerPos = context.ReadValue<Vector2>();
             Vector2 moveCamDirection = ScreenPosToEdgeDirection(pointerPos);
@@ -99,4 +99,5 @@ public class InputController : MonoBehaviour
         }
         return edgeDirection.normalized;
     }
+
 }

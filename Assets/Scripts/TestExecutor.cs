@@ -15,11 +15,11 @@ public class TestExecutor : MonoBehaviour
     {
         Debug.Log("Testing");
 
-        WorldMapMaganer.Instance.GenerateMap(40, 40);
-        CharacterManager.Instance.SpawnPlayer("Gector", true, "Sprites/PortraitSample", new Vector3Int(5, 5, 0), new Vector3(0, 0, 0));
-        GlobalStateManager.Instance.UnpauseGlobalMap();
+        //WorldMapMaganer.Instance.GenerateMap(40, 40);
+        //CharacterManager.Instance.SpawnPlayer("Gector", true, "Sprites/PortraitSample", new Vector3(0, 0, 0), new Vector3Int(5, 5, 0));
+        //GlobalStateManager.Instance.IsGlobalMapPaused = false;
         //StartCoroutine(TestSaveAndLoadRoutine());
-        StartCoroutine(TestGoAroundRoutine());
+        //StartCoroutine(TestGoAroundRoutine());
         //List<PathNode> path = Pathfinder.FindPath(new Vector3Int(0, 0, 0), new Vector3Int(5, 5, 0));
         //GlobalStateManager.Instance.ControlledPlayer.SetMovePoint(new Vector3Int(2, 2, 0));
         //EventSystem.current.currentInputModule.
@@ -33,7 +33,7 @@ public class TestExecutor : MonoBehaviour
         yield return new WaitForSeconds(1);
         GlobalStateManager.Instance.LoadGame();
         Debug.Log("Load");
-        GlobalStateManager.Instance.UnpauseGlobalMap();
+        GlobalStateManager.Instance.IsGlobalMapPaused = false;
         Debug.Log("Unpause");
         yield return new WaitForSeconds(2.5f);
         GlobalStateManager.Instance.LoadGame();
@@ -65,12 +65,6 @@ public class TestExecutor : MonoBehaviour
             }
         }
     }
-    public void buttonClick(BaseEventData baseEventData)
-    {
-        PointerEventData pointerEventData = (PointerEventData)baseEventData;
-        Vector3 worldCoord = Camera.main.ScreenToWorldPoint(pointerEventData.position);
-        Vector3Int gridCoord = WorldMapMaganer.Instance.grid.WorldToCell(worldCoord);
-        Debug.Log(pointerEventData.pointerPressRaycast.gameObject);
-    }
+   
 
 }
