@@ -1,14 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Zenject;
 
 public class InputController : MonoBehaviour
 {
     public CameraController cameraController;
     public bool isEdgeScrollEnable = true;
-    
+
+    private GlobalStateManager _globalStateManager;
+    private WorldMapMaganer _worldMapManager;
+    private Grid _worldGrid;
+    private TileSelector _selector;
+
+    [Inject]
+    public void Construct(GlobalStateManager globalStateManager, WorldMapMaganer worldMapMaganer, Grid worldGrid, TileSelector selector)
+    {
+        _globalStateManager = globalStateManager;
+        _worldMapManager = worldMapMaganer;
+        _worldGrid = worldGrid;
+        _selector = selector;
+    }
+
     public void OnCameraMovementInput(InputAction.CallbackContext context)
     {
         Vector2 moveCamDirection = context.ReadValue<Vector2>();
@@ -37,19 +50,17 @@ public class InputController : MonoBehaviour
     {
         PointerEventData pointerEventData = (PointerEventData)baseEventData;
         Vector3 worldCoord = Camera.main.ScreenToWorldPoint(pointerEventData.position);
-        Vector3Int gridCoord = WorldMapMaganer.Instance.grid.WorldToCell(worldCoord);
+        Vector3Int gridCoord = _worldGrid.WorldToCell(worldCoord);
         switch (pointerEventData.button)
         {
             case PointerEventData.InputButton.Left:
-                WorldMapMaganer.Instance.selector.transform.parent = null;
-                WorldMapMaganer.Instance.selector.SelectTile(gridCoord);
-                WorldMapMaganer.Instance.selector.spriteRenderer.sprite = WorldMapMaganer.Instance.selector.tileSelectorSprite;
-                GlobalStateManager.Instance.ControlledPlayer = null;
+                _selector.SelectTile(gridCoord);
+                _globalStateManager.ControlledPlayer = null;
                 break;
             case PointerEventData.InputButton.Right:
-                if (WorldMapMaganer.Instance.WorldMap.Find(tile => tile.Coords == gridCoord).TerrainType != TerrainType.Water)
+                if (_worldMapManager.WorldMap.Find(tile => tile.Coords == gridCoord).TerrainType != TerrainType.Water)
                 {
-                    GlobalStateManager.Instance.ControlledPlayer?.SetMovePoint(gridCoord);
+                    _globalStateManager.ControlledPlayer?.MovementController.SetMovePoint(gridCoord);
                 }
                 break;
         }
@@ -99,5 +110,4 @@ public class InputController : MonoBehaviour
         }
         return edgeDirection.normalized;
     }
-
 }

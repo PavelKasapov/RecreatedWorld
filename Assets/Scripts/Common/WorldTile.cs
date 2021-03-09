@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-[System.Serializable]
+﻿[System.Serializable]
 public class WorldTile
 {
     public TerrainType TerrainType { get; set; }

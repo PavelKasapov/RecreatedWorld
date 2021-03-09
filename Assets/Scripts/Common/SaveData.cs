@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 [System.Serializable]
 public class SaveData
@@ -14,15 +11,7 @@ public class SaveData
         PlayerListData = new List<PlayerSaveData>();
         foreach (Player player in playerList)
         {
-            string spritePath = AssetDatabase.GetAssetPath(player.portrait.sprite);
-            PlayerSaveData playerSaveData = new PlayerSaveData()
-            {
-                Name = player.Name,
-                DirectControl = player.DirectControl,
-                TargetGridCoord = player.TargetGridCoords,
-                WorldCoord = player.transform.position,
-                SpritePath = spritePath.Remove(spritePath.Length - 4, 4).Remove(0, 17)
-            };
+            PlayerSaveData playerSaveData = new PlayerSaveData(player);
             PlayerListData.Add(playerSaveData);
         }
         WorldMapData = worldMap;

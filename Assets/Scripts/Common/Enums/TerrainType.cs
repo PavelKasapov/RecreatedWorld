@@ -2,5 +2,12 @@
 {
     Water,
     Grassland,
-    Forest
+    Forest,
+    Mountains,
+    Desert,
+    Hills,
+    Swamp,
+    Wastelands,
+    Void,
+    Base
 }

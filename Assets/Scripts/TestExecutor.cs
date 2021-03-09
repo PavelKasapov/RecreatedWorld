@@ -5,12 +5,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+
 public class TestExecutor : MonoBehaviour
 {
     public TileSelector tileSelector;
     public Grid grid;
     public Controls controls;
-    // Start is called before the first frame update
+
     void Start()
     {
         Debug.Log("Testing");
@@ -25,28 +26,28 @@ public class TestExecutor : MonoBehaviour
         //EventSystem.current.currentInputModule.
     }
 
-    private IEnumerator TestSaveAndLoadRoutine()
-    {
-        yield return new WaitForSeconds(1);
-        GlobalStateManager.Instance.SaveGame();
-        Debug.Log("Save");
-        yield return new WaitForSeconds(1);
-        GlobalStateManager.Instance.LoadGame();
-        Debug.Log("Load");
-        GlobalStateManager.Instance.IsGlobalMapPaused = false;
-        Debug.Log("Unpause");
-        yield return new WaitForSeconds(2.5f);
-        GlobalStateManager.Instance.LoadGame();
-        Debug.Log("Load");
-    }
+    //private IEnumerator TestSaveAndLoadRoutine()
+    //{
+    //    yield return new WaitForSeconds(1);
+    //    GlobalStateManager.Instance.SaveGame();
+    //    Debug.Log("Save");
+    //    yield return new WaitForSeconds(1);
+    //    GlobalStateManager.Instance.LoadGame();
+    //    Debug.Log("Load");
+    //    GlobalStateManager.Instance.IsGlobalMapPaused = false;
+    //    Debug.Log("Unpause");
+    //    yield return new WaitForSeconds(2.5f);
+    //    GlobalStateManager.Instance.LoadGame();
+    //    Debug.Log("Load");
+    //}
 
-    private IEnumerator TestGoAroundRoutine()
-    {
-        yield return new WaitForSeconds(2);
-        GlobalStateManager.Instance.ControlledPlayer.SetMovePoint(new Vector3Int(2, 2, 0));
-        yield return new WaitForSeconds(2);
-        //GlobalStateManager.Instance.ControlledPlayer.SetMovePoint(new Vector3Int(-2, -3, 0));
-    }
+    //private IEnumerator TestGoAroundRoutine()
+    //{
+    //    yield return new WaitForSeconds(2);
+    //    GlobalStateManager.Instance.ControlledPlayer.SetMovePoint(new Vector3Int(2, 2, 0));
+    //    yield return new WaitForSeconds(2);
+    //    //GlobalStateManager.Instance.ControlledPlayer.SetMovePoint(new Vector3Int(-2, -3, 0));
+    //}
 
     public void onClickAction(InputAction.CallbackContext context)
     {

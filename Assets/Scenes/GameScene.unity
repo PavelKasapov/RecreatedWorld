@@ -937,10 +937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37096e53e8a987c4d8cf248dfe39e95e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 5024229582383158328, guid: 1a93ed14250eec849b18aea4f221054c,
-    type: 3}
-  scriptablePlayerCharacter: {fileID: 11400000, guid: 4569dbb974f67f64a9bf449051e2da0c,
-    type: 2}
 --- !u!1 &173151928
 GameObject:
   m_ObjectHideFlags: 0
@@ -5043,6 +5039,90 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094206147}
   m_CullTransparentMesh: 0
+--- !u!1 &1097333012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1097333014}
+  - component: {fileID: 1097333013}
+  - component: {fileID: 1097333015}
+  m_Layer: 0
+  m_Name: SceneContext
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1097333013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097333012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 1097333015}
+  _installerPrefabs: []
+  _autoRun: 1
+  OnPreInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostInstall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPreResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPostResolve:
+    m_PersistentCalls:
+      m_Calls: []
+  _parentNewObjectsUnderSceneContext: 0
+  _contractNames: []
+  _parentContractNames: []
+--- !u!4 &1097333014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097333012}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1097333015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097333012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d8b821f6fec4b43a2480ddb44e5ea2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterManager: {fileID: 142489415}
+  globalStateManager: {fileID: 56922048}
+  worldMapMaganer: {fileID: 1222964599}
+  CharacterPrefab: {fileID: 5024229582383158328, guid: 1a93ed14250eec849b18aea4f221054c,
+    type: 3}
+  worldGrid: {fileID: 628999656}
+  groundTileMap: {fileID: 1222964596}
+  tileSelector: {fileID: 2066001977}
 --- !u!1 &1127187740
 GameObject:
   m_ObjectHideFlags: 0
@@ -6721,12 +6801,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e28da12fae11ad458bff4248db46482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundTilemap: {fileID: 1222964596}
-  grid: {fileID: 628999656}
-  selector: {fileID: 2066001977}
-  water: {fileID: 11400000, guid: 78a4cedc250b5bd45a727161a1d6af2c, type: 2}
-  grassland: {fileID: 11400000, guid: 00edb455d6c14cb408e2c2a932a421d9, type: 2}
-  forest: {fileID: 11400000, guid: e27303fecfed3ea45b17ca581fbbc35a, type: 2}
 --- !u!114 &1222964600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9478,7 +9552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1836604363
 RectTransform:
   m_ObjectHideFlags: 0

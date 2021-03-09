@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class GUIController : MonoBehaviour
 {
-    //public InputController inputController;
     public Image GUIBackground;
     public Text pauseButtonText;
     public Text characterNameInput;
@@ -14,6 +12,22 @@ public class GUIController : MonoBehaviour
     public Slider mapSizeYInput;
 
     private ActiveUIWindow _activeUIWindow = ActiveUIWindow.MainMenu;
+    private GlobalStateManager _globalStateManager;
+    private CharacterManager _characterManager;
+    private PlayerFactory _playerFactory;
+    private WorldMapRenderService _renderService;
+    private WorldMapGeneratorService _generatorService;
+
+    [Inject]
+    public void Construct(GlobalStateManager globalStateManager, CharacterManager characterManager,
+        PlayerFactory playerFactory, WorldMapRenderService renderService, WorldMapGeneratorService generatorService)
+    {
+        _globalStateManager = globalStateManager;
+        _characterManager = characterManager;
+        _playerFactory = playerFactory;
+        _renderService = renderService;
+        _generatorService = generatorService;
+    }
 
     private Dictionary<ActiveUIWindow, Color> backgroundColor = new Dictionary<ActiveUIWindow, Color>
     {
@@ -31,13 +45,16 @@ public class GUIController : MonoBehaviour
 
     public void onPauseButtonClick()
     {
-        GlobalStateManager.Instance.IsGlobalMapPaused = !GlobalStateManager.Instance.IsGlobalMapPaused;
-        pauseButtonText.text = GlobalStateManager.Instance.IsGlobalMapPaused ? "|| Continue" : "> Stop";
+        _globalStateManager.IsGlobalMapPaused = !_globalStateManager.IsGlobalMapPaused;
+        pauseButtonText.text = _globalStateManager.IsGlobalMapPaused ? "|| Continue" : "> Stop";
     }
     public void onNewGameSubmit()
     {
-        WorldMapMaganer.Instance.GenerateMap((int)mapSizeXInput.value, (int)mapSizeYInput.value);
-        CharacterManager.Instance.SpawnPlayer(characterNameInput.text, true, "Sprites/PortraitSample", new Vector3(0, 0, 0), new Vector3Int(0, 0, 0));
+        _generatorService.GenerateMap((int)mapSizeXInput.value, (int)mapSizeYInput.value);
+        _renderService.RenderMap();
+        Player newPlayer = _playerFactory
+            .Create(characterNameInput.text, true, "Sprites/PortraitSample", new Vector3Int(0, 0, 0), new Vector3(0, 0, 0));
+        _characterManager.PlayerList.Add(newPlayer);
     }
 
     public void onSaveGameSubmit(string saveName)
