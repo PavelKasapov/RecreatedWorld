@@ -23,14 +23,6 @@ public class PlayerFactory
         return newPlayer;
     }
 
-    public Player Create(PlayerSaveData saveData)
-    {
-        Player newPlayer = _diContainer.InstantiatePrefabForComponent<Player>(_playerPrefab, saveData.WorldCoord, Quaternion.identity, null);
-        newPlayer.Name = saveData.Name;
-        newPlayer.HasControl = saveData.HasControl;
-        newPlayer.portrait.sprite = Resources.Load<Sprite>(saveData.SpritePath);
-        newPlayer.MovementController.SetMovePoint(saveData.TargetGridCoord);
-        return newPlayer;
-    }
-
+    public Player Create(PlayerSaveData saveData) =>
+        Create(saveData.Name, saveData.HasControl, saveData.SpritePath, saveData.TargetGridCoord, saveData.WorldCoord);
 }

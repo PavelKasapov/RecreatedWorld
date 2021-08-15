@@ -37,7 +37,7 @@ public class WorldMapRenderService
         foreach (var tile in _worldMapMaganer.WorldMap)
         {
             string tilebaseName = TilebaseNamePrefix[tile.TerrainType] + Random.Range(1, 5);
-            _groundTilemap.SetTile(tile.Coords, tileBases.FirstOrDefault(tilebase => tilebase.name == tilebaseName));
+            _groundTilemap.SetTile(tile.OffsetCoords, tileBases.FirstOrDefault(tilebase => tilebase.name == tilebaseName));
         }
     }
 }

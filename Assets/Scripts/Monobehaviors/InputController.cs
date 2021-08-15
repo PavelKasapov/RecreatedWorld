@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -48,17 +49,22 @@ public class InputController : MonoBehaviour
 
     public void OnGlobalMapMouseClick(BaseEventData baseEventData)
     {
-        PointerEventData pointerEventData = (PointerEventData)baseEventData;
+        var pointerEventData = (PointerEventData)baseEventData;
         Vector3 worldCoord = Camera.main.ScreenToWorldPoint(pointerEventData.position);
         Vector3Int gridCoord = _worldGrid.WorldToCell(worldCoord);
+        var targetTile = _worldMapManager.WorldMap.FirstOrDefault(tile => tile.OffsetCoords == gridCoord);
+        if (targetTile == null)
+        {
+            return;
+        }
         switch (pointerEventData.button)
         {
             case PointerEventData.InputButton.Left:
-                _selector.SelectTile(gridCoord);
+                _selector.SelectTile(targetTile);
                 _globalStateManager.ControlledPlayer = null;
                 break;
             case PointerEventData.InputButton.Right:
-                if (_worldMapManager.WorldMap.Find(tile => tile.Coords == gridCoord).TerrainType != TerrainType.Water)
+                if (targetTile.TerrainType != TerrainType.Water)
                 {
                     _globalStateManager.ControlledPlayer?.MovementController.SetMovePoint(gridCoord);
                 }

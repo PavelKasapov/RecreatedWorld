@@ -23,13 +23,13 @@ public class WorldMapMovementController : MonoBehaviour
         _worldGrid = worldGrid;
     }
 
-    public void SetMovePoint(Vector3Int targetGridCoords)
+    public void SetMovePoint(Vector3Int offsetCoords)
     {
-        TargetGridCoords = targetGridCoords;
+        TargetGridCoords = offsetCoords;
         Vector3Int gridCoords = _worldGrid.WorldToCell(gameObject.transform.position);
-        if (gridCoords != targetGridCoords)
+        if (gridCoords != offsetCoords)
         {
-            _path = _pathfinderService.FindPath(gridCoords, targetGridCoords);
+            _path = _pathfinderService.FindPath(gridCoords, offsetCoords);
             if (_moveCoroutine == null)
                 _moveCoroutine = StartCoroutine(MoveRoutine());
         }

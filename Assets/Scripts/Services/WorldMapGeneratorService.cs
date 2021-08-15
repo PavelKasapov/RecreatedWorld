@@ -15,11 +15,8 @@ public class WorldMapGeneratorService
         {
             for (int j = (-mapWidth / 2); j < (mapWidth / 2 + mapWidth % 2); j++)
             {
-                WorldTile tile = new WorldTile()
-                {
-                    TerrainType = (TerrainType)Random.Range(0, 3),
-                    Coords = new Vector3Int(i, j, 0)
-                };
+                var terrainType = (TerrainType)Random.Range(0, 3);
+                WorldTile tile = new WorldTile(i, j, terrainType);
                 _worldMapMaganer.WorldMap.Add(tile);
             }
         }

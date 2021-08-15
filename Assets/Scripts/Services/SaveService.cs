@@ -23,15 +23,15 @@ public class SaveService
         _renderService = renderService;
     }
 
-    public void SaveGame ()
+    public void SaveGame(string saveName)
     {
-        SerializeData(_characterManager.PlayerList, _worldMapManager.WorldMap);
+        SerializeData(saveName);
     }
 
-    public void LoadGame()
+    public void LoadGame(string saveName)
     {
         _globalStateManager.IsGlobalMapPaused = true;
-        SaveData data = DeserializeData();
+        SaveData data = DeserializeData(saveName);
 
         _worldMapManager.WorldMap = data.WorldMapData;
         _renderService.RenderMap();
@@ -48,30 +48,30 @@ public class SaveService
         }
     }
 
-    private void SerializeData(List<Player> playerList, List<WorldTile> worldMap)
+    private void SerializeData(string saveName)
     { 
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/saves/testsave.dat";
-        FileStream stream = new FileStream(path, FileMode.Create);
+        string path = Application.persistentDataPath + "/saves/" + saveName;
+        using (FileStream stream = new FileStream(path, FileMode.Create))
+        {
+            SaveData data = new SaveData(_characterManager.PlayerList, _worldMapManager.WorldMap);
 
-        SaveData data = new SaveData(playerList, worldMap);
-
-        formatter.Serialize(stream, data);
-        stream.Close();
+            formatter.Serialize(stream, data);
+        }
     }
 
-    private SaveData DeserializeData()
+    private SaveData DeserializeData(string saveName)
     {
-        string path = Application.persistentDataPath + "/saves/testsave.dat";
+        string path = Application.persistentDataPath + "/saves/" + saveName;
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
+            using (FileStream stream = new FileStream(path, FileMode.Open))
+            {
+                SaveData data = formatter.Deserialize(stream) as SaveData;
 
-            SaveData data = formatter.Deserialize(stream) as SaveData;
-            stream.Close();
-
-            return data;
+                return data;
+            }
         }
         else
         {

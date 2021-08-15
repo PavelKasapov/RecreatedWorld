@@ -17,10 +17,9 @@ public class TileSelector : MonoBehaviour
         _worldMapManager = worldMapMaganer;
         _worldGrid = worldGrid;
     }
-    public void SelectTile(Vector3Int gridCoords)
+    public void SelectTile(WorldTile tile)
     {
-        SelectedTile = _worldMapManager.WorldMap.Find(tile => tile.Coords == gridCoords);
-        Vector3 centerOfSelectedTile = _worldGrid.GetCellCenterWorld(SelectedTile.Coords);
+        Vector3 centerOfSelectedTile = _worldGrid.GetCellCenterWorld(tile.OffsetCoords);
         gameObject.transform.position = centerOfSelectedTile;
         transform.parent = null;
         spriteRenderer.sprite = tileSelectorSprite;

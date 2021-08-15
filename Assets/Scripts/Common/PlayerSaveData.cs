@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.IO;
+using UnityEditor;
 
 [System.Serializable]
 public class PlayerSaveData
@@ -16,6 +17,6 @@ public class PlayerSaveData
         TargetGridCoord = player.TargetGridCoords;
         WorldCoord = player.transform.position;
         string spritePath = AssetDatabase.GetAssetPath(player.portrait.sprite);
-        SpritePath = spritePath.Remove(spritePath.Length - 4, 4).Remove(0, 17);
+        SpritePath = Path.GetFileNameWithoutExtension(spritePath);
     }
 }

@@ -22,27 +22,21 @@ public class PathfinderService
     private WorldMapMaganer _worldMapMaganer;
     private Grid _worldGrid;
 
-    [Inject]
-    public void Construct(WorldMapMaganer worldMapMaganer, Grid worldGrid)
+    public PathfinderService(WorldMapMaganer worldMapMaganer, Grid worldGrid)
     {
         _worldMapMaganer = worldMapMaganer;
         _worldGrid = worldGrid;
     }
 
-    public List<PathNode> FindPath(Vector3Int fromCoords, Vector3Int toCoords)
+    public List<PathNode> FindPath(Vector3Int fromOffsetCoords, Vector3Int toOffsetCoords)
     {
-        List<PathNode> path = new List<PathNode>();
-        _toCoords = toCoords; 
-        int newHCost = CalculateHCost(fromCoords, _toCoords);
-        int newSelfCost = TerrainMoveCost[_worldMapMaganer.WorldMap.Find(tile => tile.Coords == fromCoords).TerrainType];
-        PathNode startNode = new PathNode()
-        {
-            Coords = fromCoords,
-            GCost = 0,
-            prevNode = null,
-            FCost = newHCost + newSelfCost,
-            SelfCost = newSelfCost
-        };
+        var path = new List<PathNode>();
+        var fromTile = _worldMapMaganer.WorldMap.FirstOrDefault(tile => tile.OffsetCoords == fromOffsetCoords);
+        var toTile = _worldMapMaganer.WorldMap.Find(tile => tile.OffsetCoords == toOffsetCoords);
+        _toCoords = toOffsetCoords;
+        int newHCost = CalculateHCost(fromOffsetCoords, _toCoords);
+        int newSelfCost = TerrainMoveCost[_worldMapMaganer.WorldMap.Find(tile => tile.OffsetCoords == fromOffsetCoords).TerrainType];
+        PathNode startNode = new PathNode(fromOffsetCoords, 0, newHCost, newSelfCost, null);
         _openList.Add(startNode);
         while ((_openList.Count > 0) && (_endPathNode == null))
         {
@@ -54,11 +48,11 @@ public class PathfinderService
         if (_endPathNode != null)
         {
             path.Add(_endPathNode);
-            PathNode currentNode = _endPathNode.prevNode;
+            PathNode currentNode = _endPathNode.PrevNode;
             while (currentNode != null)
             {
                 path.Add(currentNode);
-                currentNode = currentNode.prevNode;
+                currentNode = currentNode.PrevNode;
             }
         }
         _openList.Clear();
@@ -69,25 +63,25 @@ public class PathfinderService
         return path;
     }
 
-    private void CheckNeibhourTiles(PathNode tile)
+    private void CheckNeibhourTiles(PathNode prevNode)
     {
         List<Vector3Int> neighbourCoords = new List<Vector3Int>();
-        if (!_closedList.Exists(closedTile => closedTile.Coords == tile.Coords))
+        if (!_closedList.Exists(closedTile => closedTile.Coords == prevNode.Coords))
         {
-            neighbourCoords.Add(new Vector3Int(tile.Coords.x + 1, tile.Coords.y, 0));
-            neighbourCoords.Add(new Vector3Int(tile.Coords.x - 1, tile.Coords.y, 0));
-            neighbourCoords.Add(new Vector3Int(tile.Coords.x, tile.Coords.y + 1, 0));
-            neighbourCoords.Add(new Vector3Int(tile.Coords.x, tile.Coords.y - 1, 0));
+            neighbourCoords.Add(new Vector3Int(prevNode.Coords.x + 1, prevNode.Coords.y, 0));
+            neighbourCoords.Add(new Vector3Int(prevNode.Coords.x - 1, prevNode.Coords.y, 0));
+            neighbourCoords.Add(new Vector3Int(prevNode.Coords.x, prevNode.Coords.y + 1, 0));
+            neighbourCoords.Add(new Vector3Int(prevNode.Coords.x, prevNode.Coords.y - 1, 0));
 
-            if (tile.Coords.y % 2 == 0)
+            if (prevNode.Coords.y % 2 == 0)
             {
-                neighbourCoords.Add(new Vector3Int(tile.Coords.x - 1, tile.Coords.y + 1, 0));
-                neighbourCoords.Add(new Vector3Int(tile.Coords.x - 1, tile.Coords.y - 1, 0));
+                neighbourCoords.Add(new Vector3Int(prevNode.Coords.x - 1, prevNode.Coords.y + 1, 0));
+                neighbourCoords.Add(new Vector3Int(prevNode.Coords.x - 1, prevNode.Coords.y - 1, 0));
             }
             else
             {
-                neighbourCoords.Add(new Vector3Int(tile.Coords.x + 1, tile.Coords.y + 1, 0));
-                neighbourCoords.Add(new Vector3Int(tile.Coords.x + 1, tile.Coords.y - 1, 0));
+                neighbourCoords.Add(new Vector3Int(prevNode.Coords.x + 1, prevNode.Coords.y + 1, 0));
+                neighbourCoords.Add(new Vector3Int(prevNode.Coords.x + 1, prevNode.Coords.y - 1, 0));
             }
         }
         foreach (Vector3Int coords in neighbourCoords)
@@ -95,17 +89,10 @@ public class PathfinderService
             if (!_closedList.Exists(closedTile => closedTile.Coords == coords))
             {
                 int newHCost = CalculateHCost(coords, _toCoords);
-                int newSelfCost = TerrainMoveCost[_worldMapMaganer.WorldMap.Find(t => t.Coords == coords).TerrainType];
+                int newSelfCost = TerrainMoveCost[_worldMapMaganer.WorldMap.Find(t => t.OffsetCoords == coords).TerrainType];
                 
-                int newGCost = tile.GCost + newSelfCost;
-                PathNode newNode = new PathNode()
-                {
-                    Coords = coords,
-                    GCost = newGCost,
-                    prevNode = tile,
-                    FCost = newHCost + newGCost,
-                    SelfCost = newSelfCost
-                };
+                int newGCost = prevNode.GCost + newSelfCost;
+                PathNode newNode = new PathNode(coords, newGCost, newHCost, newSelfCost, prevNode);
                 if (coords == _toCoords)
                 {
                     _endPathNode = newNode;
@@ -131,10 +118,23 @@ public class PathfinderService
         {
             Vector3 newWorldCoord = Vector3.Lerp(_worldGrid.GetCellCenterWorld(fromCoord), _worldGrid.GetCellCenterWorld(toCoord), 1.0f * i / distance);
             Vector3Int newCellCoord = _worldGrid.WorldToCell(newWorldCoord);
-            HCost += TerrainMoveCost[_worldMapMaganer.WorldMap.Find(tile => tile.Coords == newCellCoord).TerrainType];
+            HCost += TerrainMoveCost[_worldMapMaganer.WorldMap.Find(tile => tile.OffsetCoords == newCellCoord).TerrainType];
         }
         return HCost;
     }
+
+    //private int CalculateHCost(Vector3Int fromCoord, Vector3Int toCoord)
+    //{
+    //    int HCost = 0;
+    //    int distance = GetTileDistance(fromCoord, toCoord);
+    //    for (int i = 1; i <= distance; i++)
+    //    {
+    //        Vector3 newWorldCoord = Vector3.Lerp(_worldGrid.GetCellCenterWorld(fromCoord), _worldGrid.GetCellCenterWorld(toCoord), 1.0f * i / distance);
+    //        Vector3Int newCellCoord = _worldGrid.WorldToCell(newWorldCoord);
+    //        HCost += TerrainMoveCost[_worldMapMaganer.WorldMap.Find(tile => tile.OffsetCoords == newCellCoord).TerrainType];
+    //    }
+    //    return HCost;
+    //}
 
     private int GetTileDistance(Vector3Int fromCoord, Vector3Int toCoord)
     {

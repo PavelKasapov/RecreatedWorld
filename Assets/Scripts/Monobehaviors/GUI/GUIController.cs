@@ -57,14 +57,5 @@ public class GUIController : MonoBehaviour
         _characterManager.PlayerList.Add(newPlayer);
     }
 
-    public void onSaveGameSubmit(string saveName)
-    {
-
-    }
-
-    public void onSaveGameSubmit()
-    {
-
-    }
 
 }
